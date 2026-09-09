@@ -1,0 +1,27 @@
+model:
+  name: "fpcd_baseline_cnn"
+  type: "baseline_difference"
+  num_classes: 5
+  in_channels: 6 # 3 for T0 + 3 for T1 (or 3 for difference)
+  encoder: "resnet18"
+  pretrained: false
+
+dataset:
+  name: "FPCD"
+  data_dir: "./data/fpcd"
+  image_size: [256, 256]
+  batch_size: 16
+  num_workers: 0
+  pin_memory: false
+
+training:
+  epochs: 5
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  loss_ce_weight: 0.5
+  loss_dice_weight: 0.5
+  class_weights: [0.2, 1.5, 2.0, 2.0, 1.8]
+  seed: 42
+  early_stopping_patience: 5
+  save_dir: "./models"
+  log_dir: "./experiments/baseline"

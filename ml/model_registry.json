@@ -1,0 +1,118 @@
+{
+  "registry_name": "WATERSCOPE Change Detection Model Registry",
+  "version": "1.0.0",
+  "updated_at": "2026-09-09T00:48:00Z",
+  "active_production_model": "waterscope_change_model_v2",
+  "models": [
+    {
+      "model_id": "waterscope_change_model_v1",
+      "model_name": "Baseline-ConcatCNN-v1",
+      "architecture": "BaselineChangeNet (9-ch Concatenation [T0, T1, Diff] + ResNet18 + UNet Decoder)",
+      "version": "1.0.0",
+      "weights_file": "models/fpcd_baseline_cnn.pt",
+      "training_dataset": "FPCD v1.0",
+      "training_date": "2026-09-06",
+      "hyperparameters": {
+        "epochs": 3,
+        "batch_size": 16,
+        "learning_rate": 0.0005,
+        "loss_type": "ce_dice",
+        "optimizer": "AdamW",
+        "weight_decay": 0.0001
+      },
+      "preprocessing": {
+        "image_size": [256, 256],
+        "normalization": "ImageNet (mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])",
+        "paired_transforms": true
+      },
+      "metrics": {
+        "pixel_accuracy": 0.9786,
+        "macro_f1": 0.1981,
+        "mean_iou": 0.1959,
+        "change_miou": 0.0001,
+        "area_mae_m2": 1358.18
+      },
+      "status": "ARCHIVED_BASELINE",
+      "notes": "Early concatenation baseline. Suffers from class collapse on minority change classes."
+    },
+    {
+      "model_id": "waterscope_change_model_v2",
+      "model_name": "SiameseNet-MultiScale-v2",
+      "architecture": "SiameseChangeNet (Shared ResNet18 Twin + 5-Stage Feature Difference Fusion + FPN Decoder)",
+      "version": "2.0.0",
+      "weights_file": "models/fpcd_siamese_v1.pt",
+      "training_dataset": "FPCD v1.0 (Geographic cluster split)",
+      "training_date": "2026-09-08",
+      "hyperparameters": {
+        "epochs": 8,
+        "batch_size": 16,
+        "learning_rate": 0.0005,
+        "loss_type": "ce_dice",
+        "optimizer": "AdamW",
+        "scheduler": "CosineAnnealingLR"
+      },
+      "preprocessing": {
+        "image_size": [256, 256],
+        "normalization": "ImageNet stats",
+        "paired_transforms": true
+      },
+      "metrics": {
+        "pixel_accuracy": 0.9899,
+        "macro_f1": 0.3040,
+        "mean_iou": 0.2693,
+        "change_miou": 0.0890,
+        "area_mae_m2": 396.55
+      },
+      "status": "OPERATIONAL_STABLE",
+      "notes": "Primary operational model. Robust on Farm Pond Constructed (IoU 0.3559, Recall 60.6%)."
+    },
+    {
+      "model_id": "waterscope_change_model_v3",
+      "model_name": "Attention-SiameseNet-v3",
+      "architecture": "AttentionSiameseChangeNet (Cross-Attention Difference Gating + Focal-Tversky Loss + Class-Balanced Sampler)",
+      "version": "3.0.0",
+      "weights_file": "models/best_model.pt",
+      "training_dataset": "FPCD v1.0 + Balanced Sampling",
+      "training_date": "2026-09-09",
+      "hyperparameters": {
+        "epochs": 5,
+        "batch_size": 16,
+        "learning_rate": 0.0004,
+        "loss_type": "focal_tversky",
+        "focal_gamma": 2.0,
+        "tversky_alpha": 0.3,
+        "tversky_beta": 0.7,
+        "class_weights": [0.10, 3.0, 14.0, 10.0, 8.0],
+        "use_class_balanced_sampler": true
+      },
+      "preprocessing": {
+        "image_size": [256, 256],
+        "normalization": "ImageNet stats",
+        "paired_transforms": true
+      },
+      "calibration": {
+        "method": "Temperature Scaling (Validation Split)",
+        "temperature": 1.342,
+        "ece_before": 0.082,
+        "ece_after": 0.031
+      },
+      "metrics": {
+        "pixel_accuracy": 0.9908,
+        "macro_f1": 0.4315,
+        "mean_iou": 0.3982,
+        "change_miou": 0.2450,
+        "area_mae_m2": 312.40
+      },
+      "status": "CANDIDATE_BEST",
+      "notes": "Highest validation generalization across unseen villages with calibrated uncertainty."
+    }
+  ],
+  "target_classes": {
+    "0": "Background (No Significant Change)",
+    "1": "Farm Pond Constructed",
+    "2": "Farm Pond Demolished",
+    "3": "Farm Pond Dried",
+    "4": "Farm Pond Wetted"
+  },
+  "disclaimer": "All predictions represent observed bi-temporal visual change evidence and do not constitute legal causation proof."
+}

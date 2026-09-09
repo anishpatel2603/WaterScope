@@ -1,0 +1,91 @@
+{
+  "metrics": {
+    "pixel_accuracy": 0.9808,
+    "mIoU": 0.2704,
+    "change_mIoU": 0.0929,
+    "mean_f1": 0.3064,
+    "class_iou": {
+      "Background": 0.9806,
+      "Farm Pond Constructed": 0.3715,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_f1_dice": {
+      "Background": 0.9902,
+      "Farm Pond Constructed": 0.5418,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_precision": {
+      "Background": 0.9895,
+      "Farm Pond Constructed": 0.5472,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_recall": {
+      "Background": 0.9909,
+      "Farm Pond Constructed": 0.5364,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "confusion_matrix": [
+      [
+        953587,
+        8729,
+        10,
+        0,
+        0
+      ],
+      [
+        9118,
+        10551,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1042,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        0,
+        0,
+        0
+      ]
+    ],
+    "change_area_error_mae_m2": 691.47,
+    "change_area_error_rmse_m2": 1002.17
+  },
+  "location_errors": {
+    "Buldhana_Bhimgaon Kh": {
+      "total": 8,
+      "fp": 2060,
+      "fn": 1383,
+      "tp": 531
+    },
+    "Jalna_Bhatkheda": {
+      "total": 7,
+      "fp": 6679,
+      "fn": 8778,
+      "tp": 10020
+    }
+  },
+  "error_cases_count": 8,
+  "low_confidence_count": 15
+}

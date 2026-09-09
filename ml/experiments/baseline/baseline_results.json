@@ -1,0 +1,56 @@
+{
+  "model_architecture": "BaselineChangeNet (9-channel pixel difference concatenation)",
+  "dataset": "FPCD (Farm Pond Change Detection)",
+  "split": "validation",
+  "training_parameters": {
+    "epochs": 2,
+    "batch_size": 16,
+    "learning_rate": 0.0005,
+    "optimizer": "AdamW",
+    "loss": "Standard CrossEntropy + MultiClassDiceLoss",
+    "device": "cpu"
+  },
+  "metrics": {
+    "pixel_accuracy": 0.9862,
+    "mIoU": 0.1985,
+    "change_mIoU": 0.0016,
+    "mean_f1": 0.2012,
+    "class_iou": {
+      "Background": 0.9862,
+      "Farm Pond Constructed": 0.0,
+      "Farm Pond Demolished": 0.0065,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_f1_dice": {
+      "Background": 0.9931,
+      "Farm Pond Constructed": 0.0,
+      "Farm Pond Demolished": 0.0129,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_precision": {
+      "Background": 0.9884,
+      "Farm Pond Constructed": 0.0,
+      "Farm Pond Demolished": 0.0073,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_recall": {
+      "Background": 0.9978,
+      "Farm Pond Constructed": 0.0,
+      "Farm Pond Demolished": 0.0593,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "change_area_error_mae_m2": 828.69,
+    "change_area_error_rmse_m2": 1473.6,
+    "validation_loss": 1.3847
+  },
+  "failure_modes_identified": [
+    "Near-total collapse on all intervention classes (Change mIoU = 0.16%)",
+    "Background dominance overwhelms standard unweighted CE + Dice loss",
+    "Lack of shared Siamese encoder prevents differential feature representation",
+    "No class-balanced sampling causes rare classes to receive zero gradients in most batches"
+  ]
+}

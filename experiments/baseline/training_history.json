@@ -1,0 +1,99 @@
+{
+  "history": {
+    "train_loss": [
+      1.3894574173859187,
+      1.2254861806120192
+    ],
+    "val_loss": [
+      7.018970148903983,
+      1.384673067501613
+    ],
+    "val_mIoU": [
+      0.0741,
+      0.1985
+    ],
+    "val_accuracy": [
+      0.3598,
+      0.9862
+    ],
+    "learning_rates": [
+      0.0005,
+      0.0
+    ]
+  },
+  "best_metrics": {
+    "pixel_accuracy": 0.9862,
+    "mIoU": 0.1985,
+    "change_mIoU": 0.0016,
+    "mean_f1": 0.2012,
+    "class_iou": {
+      "Background": 0.9862,
+      "Farm Pond Constructed": 0.0,
+      "Farm Pond Demolished": 0.0065,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_f1_dice": {
+      "Background": 0.9931,
+      "Farm Pond Constructed": 0.0,
+      "Farm Pond Demolished": 0.0129,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_precision": {
+      "Background": 0.9884,
+      "Farm Pond Constructed": 0.0,
+      "Farm Pond Demolished": 0.0073,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_recall": {
+      "Background": 0.9978,
+      "Farm Pond Constructed": 0.0,
+      "Farm Pond Demolished": 0.0593,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "confusion_matrix": [
+      [
+        7174003,
+        577,
+        7242,
+        7766,
+        264
+      ],
+      [
+        46931,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        786,
+        13,
+        53,
+        42,
+        0
+      ],
+      [
+        1043,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        35776,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "change_area_error_mae_m2": 828.69,
+    "change_area_error_rmse_m2": 1473.6,
+    "loss": 1.384673067501613
+  },
+  "duration_seconds": 96.83
+}

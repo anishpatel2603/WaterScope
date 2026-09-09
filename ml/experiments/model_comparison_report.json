@@ -1,0 +1,274 @@
+{
+  "dataset": "FPCD",
+  "test_samples": 148,
+  "comparison_table": {
+    "Metric": [
+      "Pixel Accuracy",
+      "mIoU (Macro)",
+      "Change mIoU",
+      "Mean F1 Score",
+      "Area MAE (m\u00b2)"
+    ],
+    "Baseline (v1)": [
+      "97.86%",
+      "19.59%",
+      "0.01%",
+      "19.81%",
+      "1358.18 m\u00b2"
+    ],
+    "Siamese (v2)": [
+      "98.99%",
+      "26.93%",
+      "8.90%",
+      "30.40%",
+      "396.55 m\u00b2"
+    ],
+    "Attention Siamese (v3 - Best)": [
+      "0.60%",
+      "0.12%",
+      "0.15%",
+      "0.24%",
+      "64868.08 m\u00b2"
+    ]
+  },
+  "attention_class_iou": {
+    "Background": 0.0,
+    "Farm Pond Constructed": 0.006,
+    "Farm Pond Demolished": 0.0,
+    "Farm Pond Dried": 0.0,
+    "Farm Pond Wetted": 0.0
+  },
+  "siamese_class_iou": {
+    "Background": 0.9905,
+    "Farm Pond Constructed": 0.3559,
+    "Farm Pond Demolished": 0.0,
+    "Farm Pond Dried": 0.0,
+    "Farm Pond Wetted": 0.0
+  },
+  "baseline_class_iou": {
+    "Background": 0.9787,
+    "Farm Pond Constructed": 0.0006,
+    "Farm Pond Demolished": 0.0,
+    "Farm Pond Dried": 0.0,
+    "Farm Pond Wetted": 0.0
+  },
+  "attention_metrics": {
+    "pixel_accuracy": 0.006,
+    "mIoU": 0.0012,
+    "change_mIoU": 0.0015,
+    "mean_f1": 0.0024,
+    "class_iou": {
+      "Background": 0.0,
+      "Farm Pond Constructed": 0.006,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_f1_dice": {
+      "Background": 0.0,
+      "Farm Pond Constructed": 0.0119,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_precision": {
+      "Background": 0.0,
+      "Farm Pond Constructed": 0.006,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_recall": {
+      "Background": 0.0,
+      "Farm Pond Constructed": 1.0,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "confusion_matrix": [
+      [
+        0,
+        9600476,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        58224,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        10568,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        20571,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        9489,
+        0,
+        0,
+        0
+      ]
+    ],
+    "change_area_error_mae_m2": 64868.08,
+    "change_area_error_rmse_m2": 64872.43
+  },
+  "siamese_metrics": {
+    "pixel_accuracy": 0.9899,
+    "mIoU": 0.2693,
+    "change_mIoU": 0.089,
+    "mean_f1": 0.304,
+    "class_iou": {
+      "Background": 0.9905,
+      "Farm Pond Constructed": 0.3559,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_f1_dice": {
+      "Background": 0.9952,
+      "Farm Pond Constructed": 0.525,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_precision": {
+      "Background": 0.9941,
+      "Farm Pond Constructed": 0.4629,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_recall": {
+      "Background": 0.9964,
+      "Farm Pond Constructed": 0.6064,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "confusion_matrix": [
+      [
+        9565873,
+        34603,
+        0,
+        0,
+        0
+      ],
+      [
+        22916,
+        35308,
+        0,
+        0,
+        0
+      ],
+      [
+        10210,
+        358,
+        0,
+        0,
+        0
+      ],
+      [
+        16206,
+        4365,
+        0,
+        0,
+        0
+      ],
+      [
+        7841,
+        1648,
+        0,
+        0,
+        0
+      ]
+    ],
+    "change_area_error_mae_m2": 396.55,
+    "change_area_error_rmse_m2": 590.97
+  },
+  "baseline_metrics": {
+    "pixel_accuracy": 0.9786,
+    "mIoU": 0.1959,
+    "change_mIoU": 0.0001,
+    "mean_f1": 0.1981,
+    "class_iou": {
+      "Background": 0.9787,
+      "Farm Pond Constructed": 0.0006,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_f1_dice": {
+      "Background": 0.9892,
+      "Farm Pond Constructed": 0.0011,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_precision": {
+      "Background": 0.9897,
+      "Farm Pond Constructed": 0.0057,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_recall": {
+      "Background": 0.9887,
+      "Farm Pond Constructed": 0.0006,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "confusion_matrix": [
+      [
+        9491947,
+        6415,
+        49256,
+        52355,
+        503
+      ],
+      [
+        57860,
+        37,
+        177,
+        150,
+        0
+      ],
+      [
+        10568,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        20571,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        9489,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "change_area_error_mae_m2": 1358.18,
+    "change_area_error_rmse_m2": 3300.18
+  }
+}

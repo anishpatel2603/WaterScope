@@ -1,0 +1,104 @@
+{
+  "history": {
+    "train_loss": [
+      1.174633949995041,
+      1.0601781478949956,
+      1.0064365076167243
+    ],
+    "val_loss": [
+      1.3789169958659582,
+      1.1826401097433907,
+      1.2107071280479431
+    ],
+    "val_mIoU": [
+      0.2329,
+      0.2417,
+      0.2417
+    ],
+    "val_accuracy": [
+      0.9846,
+      0.9867,
+      0.9855
+    ],
+    "learning_rates": [
+      0.000375,
+      0.00012500000000000006,
+      0.0
+    ]
+  },
+  "best_metrics": {
+    "pixel_accuracy": 0.9867,
+    "mIoU": 0.2417,
+    "change_mIoU": 0.0548,
+    "mean_f1": 0.2708,
+    "class_iou": {
+      "Background": 0.9894,
+      "Farm Pond Constructed": 0.219,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_f1_dice": {
+      "Background": 0.9947,
+      "Farm Pond Constructed": 0.3593,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_precision": {
+      "Background": 0.9941,
+      "Farm Pond Constructed": 0.2892,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "class_recall": {
+      "Background": 0.9952,
+      "Farm Pond Constructed": 0.4743,
+      "Farm Pond Demolished": 0.0,
+      "Farm Pond Dried": 0.0,
+      "Farm Pond Wetted": 0.0
+    },
+    "confusion_matrix": [
+      [
+        7155275,
+        34519,
+        51,
+        0,
+        7
+      ],
+      [
+        24673,
+        22258,
+        0,
+        0,
+        0
+      ],
+      [
+        894,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1042,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        15601,
+        20175,
+        0,
+        0,
+        0
+      ]
+    ],
+    "change_area_error_mae_m2": 395.7,
+    "change_area_error_rmse_m2": 610.59,
+    "loss": 1.1826401097433907
+  },
+  "duration_seconds": 263.43
+}

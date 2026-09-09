@@ -1,0 +1,98 @@
+{
+  "dataset_name": "Farm Pond Change Detection (FPCD)",
+  "dataset_source": "https://huggingface.co/datasets/ctundia/FPCD",
+  "total_triplets": 693,
+  "splitting_strategy": "Strict Geographic Cluster Disjoint Grouping (Village Level)",
+  "train": {
+    "total_samples": 434,
+    "unique_locations_count": 10,
+    "locations": [
+      "Amravati_Nardoda",
+      "Aurangabad_Kumbhephal",
+      "Beed_Kumbhephal",
+      "Hingoli_Gondala",
+      "Jalgaon_PimpalgaonBk",
+      "Latur_Sumthana",
+      "Nanded_Chainpur",
+      "Osmanabad_Ambejawalga",
+      "Parbhani_KinholaBk",
+      "Yavatmal_WadhonaPilki"
+    ],
+    "dominant_class_distribution": {
+      "1": 143,
+      "0": 279,
+      "3": 4,
+      "2": 7,
+      "4": 1
+    },
+    "district_distribution": {
+      "Amravati": 39,
+      "Aurangabad": 62,
+      "Beed": 37,
+      "Hingoli": 46,
+      "Jalgaon": 17,
+      "Latur": 15,
+      "Nanded": 56,
+      "Osmanabad": 74,
+      "Parbhani": 62,
+      "Yavatmal": 26
+    }
+  },
+  "validation": {
+    "total_samples": 111,
+    "unique_locations_count": 5,
+    "locations": [
+      "Buldhana_Bhimgaon Kh",
+      "Jalna_Bhatkheda",
+      "Nasik_HadapSawargaon",
+      "Wardha_KAKKADARA",
+      "Washim_BHOYATA"
+    ],
+    "dominant_class_distribution": {
+      "0": 42,
+      "1": 45,
+      "3": 2,
+      "4": 18,
+      "2": 4
+    },
+    "district_distribution": {
+      "Buldhana": 8,
+      "Jalna": 16,
+      "Nasik": 24,
+      "Wardha": 17,
+      "Washim": 46
+    }
+  },
+  "test": {
+    "total_samples": 148,
+    "unique_locations_count": 2,
+    "locations": [
+      "Akola_Akhatwada",
+      "Akola_Ghusar"
+    ],
+    "dominant_class_distribution": {
+      "2": 8,
+      "3": 13,
+      "1": 71,
+      "0": 53,
+      "4": 3
+    },
+    "district_distribution": {
+      "Akola": 148
+    }
+  },
+  "leakage_verification": {
+    "train_and_val_location_overlap": [],
+    "train_and_test_location_overlap": [],
+    "val_and_test_location_overlap": [],
+    "spatial_leakage_detected": false,
+    "status": "VERIFIED_ZERO_DATA_LEAKAGE"
+  },
+  "classes": {
+    "0": "Background (No Change)",
+    "1": "Farm Pond Constructed",
+    "2": "Farm Pond Demolished",
+    "3": "Farm Pond Dried",
+    "4": "Farm Pond Wetted"
+  }
+}

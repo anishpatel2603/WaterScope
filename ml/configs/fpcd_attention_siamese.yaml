@@ -1,0 +1,43 @@
+model:
+  name: "fpcd_attention_siamese"
+  type: "attention_siamese"
+  num_classes: 5
+  encoder_name: "resnet18"
+  pretrained: true
+  use_attention: true
+  fusion_type: "difference_attention"
+  decoder_channels: [256, 128, 64, 32, 16]
+
+dataset:
+  name: "FPCD"
+  dataset_id: "ctundia/FPCD"
+  data_dir: "./data/fpcd"
+  image_size: [256, 256]
+  batch_size: 16
+  num_workers: 0
+  pin_memory: false
+  pixel_resolution_m: 1.0
+  use_class_balanced_sampler: true
+
+classes:
+  0: "Background"
+  1: "Farm Pond Constructed"
+  2: "Farm Pond Demolished"
+  3: "Farm Pond Dried"
+  4: "Farm Pond Wetted"
+
+training:
+  epochs: 5
+  learning_rate: 0.0004
+  weight_decay: 0.0001
+  loss_type: "focal_tversky"
+  loss_ce_weight: 0.4
+  loss_dice_weight: 0.6
+  focal_gamma: 2.0
+  tversky_alpha: 0.3
+  tversky_beta: 0.7
+  aux_cls_weight: 0.2
+  class_weights: [0.10, 3.0, 14.0, 10.0, 8.0]
+  seed: 42
+  save_dir: "./models"
+  log_dir: "./experiments/attention_siamese"

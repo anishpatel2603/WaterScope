@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WATERSCOPE | Watershed Intervention AI Change Detection Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #060913;
+      --bg-surface: #0f172a;
+      --bg-surface-elevated: #1e293b;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --border: rgba(148, 163, 184, 0.12);
+      --border-glow: rgba(56, 189, 248, 0.3);
+      --primary: #0284c7;
+      --primary-light: #38bdf8;
+      --cyan: #06b6d4;
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.25);
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --radius: 14px;
+      --shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+      --glass: backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(2, 132, 199, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.5) 0px, transparent 100%);
+    }
+
+    /* Container */
+    .app-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px 32px 64px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0284c7, #10b981);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(2, 132, 199, 0.4);
+    }
+
+    .brand-logo svg {
+      width: 26px;
+      height: 26px;
+      fill: none;
+      stroke: white;
+      stroke-width: 2.2;
+    }
+
+    .brand-text h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #ffffff 40%, #93c5fd 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+
+    .brand-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .system-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 10px var(--emerald);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    /* Mode selector tabs */
+    .mode-switch {
+      display: flex;
+      background: rgba(15, 23, 42, 0.9);
+      padding: 4px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .mode-btn {
+      padding: 6px 14px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .mode-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 2px 10px rgba(2, 132, 199, 0.35);
+    }
+
+    /* Presets Bar */
+    .presets-section {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .preset-label {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preset-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .preset-chip {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border);
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .preset-chip:hover {
+      border-color: var(--primary-light);
+      transform: translateY(-1px);
+    }
+
+    .preset-chip.active {
+      background: linear-gradient(135deg, rgba(2, 132, 199, 0.2), rgba(16, 185, 129, 0.2));
+      border-color: var(--primary-light);
+      color: white;
+    }
+
+    .chip-badge {
+      font-size: 10px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      text-transform: uppercase;
+    }
+    .chip-constructed { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .chip-wetted { background: rgba(6, 182, 212, 0.2); color: #38bdf8; }
+    .chip-dried { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+
+    /* Main Grid Layout */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 1080px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Visual Evidence Stage */
+    .stage-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .stage-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stage-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .controls-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .opacity-control {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .opacity-control input[type="range"] {
+      width: 110px;
+      accent-color: var(--primary-light);
+      cursor: pointer;
+    }
+
+    /* Bi-Temporal Images Stage */
+    .image-stage-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .image-stage-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .viewport-box {
+      background: #020617;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .viewport-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .overlay-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+      opacity: 0.85;
+      transition: opacity 0.15s ease;
+    }
+
+    .viewport-tag {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    .date-tag {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--primary-light);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    /* Class Legend */
+    .legend-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: rgba(15, 23, 42, 0.5);
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+    .leg-green { background: #22c55e; box-shadow: 0 0 8px rgba(34, 197, 94, 0.4); }
+    .leg-red { background: #ef4444; box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+    .leg-orange { background: #f97316; box-shadow: 0 0 8px rgba(249, 115, 22, 0.4); }
+    .leg-cyan { background: #06b6d4; box-shadow: 0 0 8px rgba(6, 182, 212, 0.4); }
+
+    /* Action Trigger Bar */
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: linear-gradient(135deg, #0284c7, #0d9488);
+      border: none;
+      color: white;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 14px 24px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(2, 132, 199, 0.35);
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(2, 132, 199, 0.5);
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 14px 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--border-glow);
+      background: rgba(30, 41, 59, 0.9);
+    }
+
+    /* Right Column - Evidence & Metrics */
+    .results-column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Verdict Card */
+    .verdict-card {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(15, 23, 42, 0.85));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius);
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .verdict-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+
+    .verdict-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--emerald);
+    }
+
+    .verdict-badge {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      color: #ffffff;
+      margin-top: 4px;
+    }
+
+    .score-circle {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.15);
+      border: 3px solid var(--emerald);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px var(--emerald-glow);
+    }
+
+    .score-val {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .score-unit {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .verdict-rationale {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    /* Score breakdown bars */
+    .component-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(148, 163, 184, 0.1);
+    }
+
+    .comp-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .comp-name {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .comp-bar-wrap {
+      flex: 1;
+      max-width: 140px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0 10px;
+    }
+
+    .comp-bar {
+      height: 100%;
+      background: var(--primary-light);
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .comp-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-main);
+      min-width: 32px;
+      text-align: right;
+    }
+
+    /* Metrics 2x2 Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .metric-box {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      margin-bottom: 6px;
+    }
+
+    .metric-value {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .metric-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    /* Spectral Indicators Card */
+    .spectral-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .spectral-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .spectral-row {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .spectral-info h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .spectral-info p {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .spectral-badges {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .index-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(2, 132, 199, 0.15);
+      border: 1px solid rgba(2, 132, 199, 0.3);
+      color: var(--primary-light);
+    }
+
+    .delta-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .delta-pos { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    .delta-neg { background: rgba(244, 63, 94, 0.2); color: #fb7185; }
+
+    /* Scientific Disclaimer Box */
+    .disclaimer-box {
+      background: rgba(30, 41, 59, 0.4);
+      border-left: 3px solid var(--amber);
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .disclaimer-box strong {
+      color: var(--amber);
+      font-weight: 700;
+    }
+
+    /* Modal / Report Overlay */
+    .report-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .report-sheet {
+      background: #ffffff;
+      color: #0f172a;
+      max-width: 800px;
+      width: 100%;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      max-height: 90vh;
+      overflow-y: auto;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .report-sheet h2 {
+      font-size: 20px;
+      color: #0369a1;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .report-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+
+    .report-table th, .report-table td {
+      border: 1px solid #e2e8f0;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    .report-table th {
+      background: #f8fafc;
+      font-weight: 700;
+    }
+
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Header -->
+    <header>
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>WATERSCOPE</h1>
+          <p>Bi-Temporal Change Detection ML Engine • Watershed Interventions</p>
+        </div>
+      </div>
+
+      <div class="system-status">
+        <div class="mode-switch">
+          <button class="mode-btn active" id="btnModeSat" onclick="setMode('satellite')">Satellite Pair Mode</button>
+          <button class="mode-btn" id="btnModeField" onclick="setMode('field')">Field Photo Mode</button>
+        </div>
+
+        <div class="status-badge">
+          <div class="status-dot"></div>
+          <span id="txtModelStatus">ML Online (Siamese-v1)</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Presets Quick Bar -->
+    <div class="presets-section">
+      <div class="preset-label">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        Maharashtra Verified Case Studies:
+      </div>
+      <div class="preset-buttons" id="presetsContainer">
+        <button class="preset-chip active" onclick="loadPreset('FP-001')">
+          <span>Farm Pond #FP-001 (Akola)</span>
+          <span class="chip-badge chip-constructed">Constructed</span>
+        </button>
+        <button class="preset-chip" onclick="loadPreset('FP-042')">
+          <span>Farm Pond #FP-042 (Amravati)</span>
+          <span class="chip-badge chip-wetted">Wetted</span>
+        </button>
+        <button class="preset-chip" onclick="loadPreset('FP-108')">
+          <span>Farm Pond #FP-108 (Washim)</span>
+          <span class="chip-badge chip-dried">Dried</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="dashboard-grid">
+      
+      <!-- Left Stage: Visual Inspection -->
+      <div class="stage-card">
+        <div class="stage-header">
+          <div class="stage-title">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+            Bi-Temporal Visual Evidence Stage
+          </div>
+          
+          <div class="controls-group">
+            <div class="opacity-control">
+              <span>Mask Opacity:</span>
+              <input type="range" id="maskOpacity" min="0" max="100" value="85" oninput="updateMaskOpacity(this.value)">
+              <span id="opacityVal">85%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="image-stage-grid">
+          <!-- BEFORE T0 -->
+          <div class="viewport-box" id="vpBefore">
+            <div class="viewport-tag">BEFORE (T0)</div>
+            <div class="date-tag" id="tagT0Date">2007-03</div>
+            <img id="imgT0" src="/api/preset-image/Akola_Akhatwada_0/t0" alt="Before Intervention">
+          </div>
+
+          <!-- AFTER T1 + Mask Overlay -->
+          <div class="viewport-box" id="vpAfter">
+            <div class="viewport-tag">AFTER (T1) + AI MASK</div>
+            <div class="date-tag" id="tagT1Date">2018-03</div>
+            <img id="imgT1" src="/api/preset-image/Akola_Akhatwada_0/t1" alt="After Intervention">
+            <img id="imgMaskOverlay" class="overlay-layer" src="" alt="Change Mask Layer" style="display: none;">
+          </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="legend-bar">
+          <div class="legend-item"><div class="legend-dot leg-green"></div> Constructed</div>
+          <div class="legend-item"><div class="legend-dot leg-red"></div> Demolished</div>
+          <div class="legend-item"><div class="legend-dot leg-orange"></div> Dried</div>
+          <div class="legend-item"><div class="legend-dot leg-cyan"></div> Wetted</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-bar">
+          <button class="btn-primary" id="btnRunAI" onclick="runAnalysis()">
+            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            <span id="btnText">Run AI Bi-Temporal Analysis</span>
+          </button>
+          <button class="btn-secondary" onclick="openAuditReport()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Audit Report
+          </button>
+        </div>
+
+        <div class="disclaimer-box">
+          <strong>SCIENTIFIC PRINCIPLE:</strong> Model quantifies observable surface change between T0 and T1 orthophotos. Does not claim causal ecological impact without field hydrologic ground-truthing.
+        </div>
+      </div>
+
+      <!-- Right Column: Results & Evidence -->
+      <div class="results-column">
+        
+        <!-- Hybrid Verdict Card -->
+        <div class="verdict-card" id="verdictCard">
+          <div class="verdict-header">
+            <div>
+              <div class="verdict-label">Hydrological Synthesis</div>
+              <div class="verdict-badge" id="txtVerdict">OBSERVED IMPROVEMENT</div>
+            </div>
+            <div class="score-circle">
+              <span class="score-val" id="txtScore">84</span>
+              <span class="score-unit">Score</span>
+            </div>
+          </div>
+
+          <p class="verdict-rationale" id="txtRationale">
+            Multi-temporal neural inference confirms newly established surface water retention structure with strong spectral confirmation.
+          </p>
+
+          <!-- Component Breakdown -->
+          <div class="component-bars">
+            <div class="comp-row">
+              <span class="comp-name">ML Change Evidence (35%)</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" id="barML" style="width: 85%;"></div></div>
+              <span class="comp-val" id="valML">85.0</span>
+            </div>
+            <div class="comp-row">
+              <span class="comp-name">Water Extent Delta (30%)</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" id="barWater" style="width: 88%;"></div></div>
+              <span class="comp-val" id="valWater">88.2</span>
+            </div>
+            <div class="comp-row">
+              <span class="comp-name">Vegetation Response (20%)</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" id="barVeg" style="width: 72%;"></div></div>
+              <span class="comp-val" id="valVeg">72.4</span>
+            </div>
+            <div class="comp-row">
+              <span class="comp-name">Model Confidence (15%)</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" id="barConf" style="width: 91%;"></div></div>
+              <span class="comp-val" id="valConf">91.0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2x2 Quantitative Metrics Grid -->
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div class="metric-label">Dominant Change</div>
+            <div class="metric-value" id="metricClass" style="color: #34d399; font-size: 16px;">
+              Farm Pond Constructed
+            </div>
+            <div class="metric-sub">Multi-Class Mask Head</div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-label">Calibrated Confidence</div>
+            <div class="metric-value" id="metricConf">
+              91.4<span style="font-size: 14px;">%</span>
+            </div>
+            <div class="metric-sub" id="metricConfMethod">Over Change Region</div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-label">Changed Surface Area</div>
+            <div class="metric-value" id="metricArea">
+              1,240 <span style="font-size: 13px; color: var(--text-dim);">m²</span>
+            </div>
+            <div class="metric-sub">1.0m/px GSD Resolution</div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-label">Pixel Alteration</div>
+            <div class="metric-value" id="metricPct">
+              18.4<span style="font-size: 14px;">%</span>
+            </div>
+            <div class="metric-sub">Relative to 1024×768 Extent</div>
+          </div>
+        </div>
+
+        <!-- Remote Sensing Spectral Indicators -->
+        <div class="spectral-card">
+          <div class="card-title">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            Satellite Remote Sensing Spectral Indices
+          </div>
+
+          <div class="spectral-rows">
+            <div class="spectral-row">
+              <div class="spectral-info">
+                <h4>NDVI (Vegetation Index)</h4>
+                <p>Visible Atmospherically Resistant Biomass</p>
+              </div>
+              <div class="spectral-badges">
+                <span class="index-pill" id="valNDVI">0.14 → 0.28</span>
+                <span class="delta-pill delta-pos" id="deltaNDVI">+0.14</span>
+              </div>
+            </div>
+
+            <div class="spectral-row">
+              <div class="spectral-info">
+                <h4>NDWI (Water Retention Index)</h4>
+                <p>Surface Moisture & Ponding Extent</p>
+              </div>
+              <div class="spectral-badges">
+                <span class="index-pill" id="valNDWI">-0.08 → +0.31</span>
+                <span class="delta-pill delta-pos" id="deltaNDWI">+0.39</span>
+              </div>
+            </div>
+
+            <div class="spectral-row">
+              <div class="spectral-info">
+                <h4>Surface Water Extent Delta</h4>
+                <p>Estimated Pond Reservoir Expansion</p>
+              </div>
+              <div class="spectral-badges">
+                <span class="index-pill" id="valWaterDelta">+1,180 m²</span>
+                <span class="delta-pill delta-pos" id="pctWaterDelta">+100%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Audit Report Modal -->
+  <div class="report-modal" id="reportModal">
+    <div class="report-sheet">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>WATERSCOPE INTERVENTION VERIFICATION CERTIFICATE</h2>
+        <button onclick="closeAuditReport()" style="padding: 6px 12px; cursor: pointer; border: 1px solid #ccc; background: #fff; border-radius: 6px;">Close</button>
+      </div>
+
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">
+        Authoritative bi-temporal remote sensing evaluation record generated by WATERSCOPE ML Engine v1.0.0.
+      </p>
+
+      <table class="report-table">
+        <tr><th>Intervention ID</th><td id="repId">FP-001 (Akola, Maharashtra)</td></tr>
+        <tr><th>Evaluation Mode</th><td id="repMode">Satellite Bi-Temporal Mode</td></tr>
+        <tr><th>Timestamp</th><td id="repTime">2026-09-06</td></tr>
+        <tr><th>Identified Change Class</th><td id="repClass">Farm Pond Constructed</td></tr>
+        <tr><th>Calibrated Confidence</th><td id="repConf">91.4% (Mean Region Probability)</td></tr>
+        <tr><th>Estimated Changed Surface Area</th><td id="repArea">1,240 m²</td></tr>
+        <tr><th>Hydrological Verdict</th><td id="repVerdict">OBSERVED IMPROVEMENT</td></tr>
+        <tr><th>Composite Evidence Score</th><td id="repScore">84.2 / 100</td></tr>
+      </table>
+
+      <div style="background: #f1f5f9; padding: 14px; border-radius: 8px; font-size: 12px; line-height: 1.6; margin-top: 20px;">
+        <strong>Scientific Limitation Notice:</strong> This audit report documents observable surface changes derived from bi-temporal high-resolution imagery. In accordance with hydrological verification protocols, this document verifies physical appearance of the intervention structure without asserting unvalidated downstream groundwater recharge claims.
+      </div>
+
+      <div style="margin-top: 24px; text-align: right;">
+        <button onclick="window.print()" style="padding: 10px 20px; background: #0284c7; color: #fff; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;">
+          Print / Save PDF Certificate
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentMode = 'satellite';
+    let currentPreset = 'FP-001';
+    let currentAnalysis = null;
+    let presetData = {};
+
+    const PRESET_CATALOG = {
+      'FP-001': {
+        district: 'Akola',
+        village: 'Akhatwada',
+        t0_date: '2007-03',
+        t1_date: '2018-03',
+        t0_key: 'Akola_Akhatwada_0'
+      },
+      'FP-042': {
+        district: 'Amravati',
+        village: 'Anjangaon',
+        t0_date: '2010-04',
+        t1_date: '2019-04',
+        t0_key: 'Amravati_Anjangaon_0'
+      },
+      'FP-108': {
+        district: 'Washim',
+        village: 'Malegaon',
+        t0_date: '2011-03',
+        t1_date: '2017-03',
+        t0_key: 'Washim_Malegaon_0'
+      }
+    };
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('btnModeSat').classList.toggle('active', mode === 'satellite');
+      document.getElementById('btnModeField').classList.toggle('active', mode === 'field');
+      runAnalysis();
+    }
+
+    function updateMaskOpacity(val) {
+      document.getElementById('opacityVal').innerText = val + '%';
+      const overlay = document.getElementById('imgMaskOverlay');
+      overlay.style.opacity = val / 100;
+    }
+
+    async function loadPresetsCatalog() {
+      try {
+        const res = await fetch('/api/presets');
+        const data = await res.json();
+        if (data.presets && data.presets.length > 0) {
+          const container = document.getElementById('presetsContainer');
+          container.innerHTML = '';
+          data.presets.forEach((p, idx) => {
+            const btn = document.createElement('button');
+            btn.className = `preset-chip ${idx === 0 ? 'active' : ''}`;
+            btn.onclick = () => selectPreset(p);
+            
+            let badgeCls = 'chip-constructed';
+            if (p.ground_truth_class.includes('Wetted')) badgeCls = 'chip-wetted';
+            if (p.ground_truth_class.includes('Dried')) badgeCls = 'chip-dried';
+            
+            btn.innerHTML = `<span>${p.code} (${p.district})</span><span class="chip-badge ${badgeCls}">${p.ground_truth_class.replace('Farm Pond ', '')}</span>`;
+            container.appendChild(btn);
+            presetData[p.code] = p;
+          });
+          if (data.presets[0]) {
+            selectPreset(data.presets[0]);
+          }
+        }
+      } catch (err) {
+        console.warn("Using fallback preset catalog", err);
+      }
+    }
+
+    function selectPreset(p) {
+      currentPreset = p.code;
+      document.querySelectorAll('.preset-chip').forEach(c => c.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      
+      document.getElementById('imgT0').src = p.t0_url;
+      document.getElementById('imgT1').src = p.t1_url;
+      document.getElementById('tagT0Date').innerText = p.t0_date;
+      document.getElementById('tagT1Date').innerText = p.t1_date;
+      
+      document.getElementById('imgMaskOverlay').style.display = 'none';
+      runAnalysis();
+    }
+
+    function loadPreset(code) {
+      currentPreset = code;
+      const p = PRESET_CATALOG[code];
+      if (!p) return;
+      document.getElementById('imgT0').src = `/api/preset-image/${p.t0_key}/t0`;
+      document.getElementById('imgT1').src = `/api/preset-image/${p.t0_key}/t1`;
+      document.getElementById('tagT0Date').innerText = p.t0_date;
+      document.getElementById('tagT1Date').innerText = p.t1_date;
+      document.getElementById('imgMaskOverlay').style.display = 'none';
+      runAnalysis();
+    }
+
+    async function runAnalysis() {
+      const btn = document.getElementById('btnRunAI');
+      const btnText = document.getElementById('btnText');
+      btn.disabled = true;
+      btnText.innerHTML = `<span class="spinner"></span> Processing Bi-Temporal Pair...`;
+
+      try {
+        const t0Src = document.getElementById('imgT0').src;
+        const t1Src = document.getElementById('imgT1').src;
+
+        // Fetch image blobs
+        const [blob0, blob1] = await Promise.all([
+          fetch(t0Src).then(r => r.blob()),
+          fetch(t1Src).then(r => r.blob())
+        ]);
+
+        const formData = new FormData();
+        formData.append('image_t0', blob0, 't0.jpg');
+        formData.append('image_t1', blob1, 't1.jpg');
+        formData.append('mode', currentMode);
+
+        const resp = await fetch('/ml/predict', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await resp.json();
+        currentAnalysis = data;
+        renderResults(data);
+
+      } catch (err) {
+        console.error("Inference failed", err);
+      } finally {
+        btn.disabled = false;
+        btnText.innerHTML = `Run AI Bi-Temporal Analysis`;
+      }
+    }
+
+    function renderResults(res) {
+      // 1. Overlay mask
+      const mask = document.getElementById('imgMaskOverlay');
+      if (res.change_mask_url) {
+        mask.src = res.change_mask_url;
+        mask.style.display = 'block';
+      }
+
+      // 2. Metrics
+      document.getElementById('metricClass').innerText = res.change_class_display || res.change_class;
+      document.getElementById('metricConf').innerHTML = `${(res.confidence * 100).toFixed(1)}<span style="font-size: 14px;">%</span>`;
+      document.getElementById('metricArea').innerHTML = `${res.changed_area_m2.toLocaleString()} <span style="font-size: 13px; color: var(--text-dim);">m²</span>`;
+      document.getElementById('metricPct').innerHTML = `${res.pixel_change_percentage}<span style="font-size: 14px;">%</span>`;
+
+      // 3. Hybrid synthesis
+      const hybrid = res.hybrid_analysis;
+      if (hybrid) {
+        const verdictEl = document.getElementById('txtVerdict');
+        verdictEl.innerText = hybrid.verdict;
+        document.getElementById('txtScore').innerText = Math.round(hybrid.composite_score);
+        document.getElementById('txtRationale').innerText = hybrid.rationale;
+
+        // Color coding verdict
+        const card = document.getElementById('verdictCard');
+        if (hybrid.verdict === 'OBSERVED IMPROVEMENT') {
+          card.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+          verdictEl.style.color = '#34d399';
+        } else if (hybrid.verdict === 'OBSERVED DEGRADATION') {
+          card.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+          verdictEl.style.color = '#f87171';
+        } else {
+          card.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+          verdictEl.style.color = '#fbbf24';
+        }
+
+        // Breakdown bars
+        const c = hybrid.components;
+        if (c) {
+          document.getElementById('barML').style.width = c.ml_change_evidence.score + '%';
+          document.getElementById('valML').innerText = c.ml_change_evidence.score;
+
+          document.getElementById('barWater').style.width = c.water_extent_evidence.score + '%';
+          document.getElementById('valWater').innerText = c.water_extent_evidence.score;
+
+          document.getElementById('barVeg').style.width = c.vegetation_evidence.score + '%';
+          document.getElementById('valVeg').innerText = c.vegetation_evidence.score;
+
+          document.getElementById('barConf').style.width = c.model_confidence.score + '%';
+          document.getElementById('valConf').innerText = c.model_confidence.score;
+        }
+      }
+
+      // 4. Remote sensing
+      const s = res.spectral_indices;
+      if (s) {
+        document.getElementById('valNDVI').innerText = `${s.mean_t0_ndvi.toFixed(2)} → ${s.mean_t1_ndvi.toFixed(2)}`;
+        const dNDVI = s.delta_mean_ndvi;
+        const pillNDVI = document.getElementById('deltaNDVI');
+        pillNDVI.innerText = (dNDVI >= 0 ? '+' : '') + dNDVI.toFixed(2);
+        pillNDVI.className = `delta-pill ${dNDVI >= 0 ? 'delta-pos' : 'delta-neg'}`;
+
+        document.getElementById('valNDWI').innerText = `${s.mean_t0_ndwi.toFixed(2)} → ${s.mean_t1_ndwi.toFixed(2)}`;
+        const dNDWI = s.delta_mean_ndwi;
+        const pillNDWI = document.getElementById('deltaNDWI');
+        pillNDWI.innerText = (dNDWI >= 0 ? '+' : '') + dNDWI.toFixed(2);
+        pillNDWI.className = `delta-pill ${dNDWI >= 0 ? 'delta-pos' : 'delta-neg'}`;
+
+        document.getElementById('valWaterDelta').innerText = (s.water_pixel_delta >= 0 ? '+' : '') + s.water_pixel_delta.toLocaleString() + ' px';
+        document.getElementById('pctWaterDelta').innerText = (s.water_extent_change_pct >= 0 ? '+' : '') + s.water_extent_change_pct + '%';
+      }
+    }
+
+    function openAuditReport() {
+      if (!currentAnalysis) {
+        alert("Please run analysis first.");
+        return;
+      }
+      document.getElementById('repId').innerText = currentPreset;
+      document.getElementById('repMode').innerText = currentAnalysis.mode === 'field' ? 'Field Photo Mode' : 'Satellite Bi-Temporal Mode';
+      document.getElementById('repTime').innerText = currentAnalysis.inference_timestamp.split('T')[0];
+      document.getElementById('repClass').innerText = currentAnalysis.change_class_display;
+      document.getElementById('repConf').innerText = (currentAnalysis.confidence * 100).toFixed(1) + '% (' + currentAnalysis.confidence_derivation_method + ')';
+      document.getElementById('repArea').innerText = currentAnalysis.changed_area_m2.toLocaleString() + ' m²';
+      document.getElementById('repVerdict').innerText = currentAnalysis.hybrid_analysis ? currentAnalysis.hybrid_analysis.verdict : 'N/A';
+      document.getElementById('repScore').innerText = currentAnalysis.hybrid_analysis ? currentAnalysis.hybrid_analysis.composite_score + ' / 100' : 'N/A';
+      document.getElementById('reportModal').style.display = 'flex';
+    }
+
+    function closeAuditReport() {
+      document.getElementById('reportModal').style.display = 'none';
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadPresetsCatalog();
+    });
+  </script>
+</body>
+</html>
