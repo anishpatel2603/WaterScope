@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: waterscope-app
+    env: python
+    buildCommand: "pip install -r requirements.txt && cd frontend && npm install && npm run build"
+    startCommand: "uvicorn api.app:app --host 0.0.0.0 --port $PORT"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: BACKEND_CORS_ORIGINS
+        value: '["*"]'
+      - key: DEMO_MODE
+        value: 'true'
+      - key: DATASET_AUTO_SYNC
+        value: 'false'
+      - key: DEVICE
+        value: 'cpu'

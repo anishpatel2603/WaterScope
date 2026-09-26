@@ -1,2 +1,0 @@
-Epoch,Train_Loss,Val_Loss,Accuracy,Macro_F1,Mean_IoU,Dice,Learning_Rate
-1,0.9227,0.9497,0.0067,0.0034,0.0017,0.0034,0.000400

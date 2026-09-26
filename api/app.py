@@ -42,9 +42,15 @@ app = FastAPI(
     version="1.0.0"
 )
 
+origins_env = os.getenv("BACKEND_CORS_ORIGINS", '["*"]')
+try:
+    origins = json.loads(origins_env)
+except Exception:
+    origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
@@ -56,6 +62,11 @@ app.include_router(api_router)
 @app.on_event("startup")
 def startup_event():
     init_db()
+
+@app.get("/health")
+def health_check():
+    """Minimal production health endpoint."""
+    return {"status": "ok"}
 
 # Global analysis results cache: analysis_id -> dict
 ANALYSIS_CACHE: Dict[str, Dict[str, Any]] = {}

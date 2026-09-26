@@ -26,12 +26,14 @@ class MLServiceClient:
         """
         try:
             # Direct in-process invocation for optimal speed and reliability
-            from src.inference.pipeline import ChangeDetectionPipeline
-            pipe = ChangeDetectionPipeline(
-                model_path=str(settings.DATA_DIR.parent / "models" / "fpcd_siamese_v1.pt"),
-                model_type="siamese"
-            )
-            result = pipe.predict(t0_input, t1_input, mode=mode)
+            if not hasattr(self, "pipe"):
+                from src.inference.pipeline import ChangeDetectionPipeline
+                self.pipe = ChangeDetectionPipeline(
+                    model_path=str(settings.DATA_DIR.parent / "models" / "fpcd_siamese_v1.pt"),
+                    model_type="siamese",
+                    device=os.getenv("DEVICE", "cpu")
+                )
+            result = self.pipe.predict(t0_input, t1_input, mode=mode)
             return result
         except Exception as e:
             # Fallback to HTTP call

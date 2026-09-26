@@ -1,8 +1,0 @@
-Experiment,Accuracy,Macro_F1,Mean_IoU,Dice_Score,Notes
-Baseline (9-ch CNN Unweighted CE),97.45%,18.20%,18.12%,18.20%,Severe collapse on all change classes (0% on classes 1-4)
-Baseline + Paired Augmentation,97.86%,19.81%,19.59%,19.81%,Identical geometric transforms reduce orientation bias
-Baseline + Class-Balanced Loss (Focal-Tversky),98.12%,24.65%,22.84%,25.10%,Penalizes false negatives on minority classes
-Siamese Twin (Pretrained ResNet18 + Diff-Cat),98.99%,30.40%,26.93%,31.05%,Shared weights preserve spatial features
-Siamese + Multi-Spectral Indices (NDVI/NDWI),99.12%,34.80%,31.25%,35.60%,Spectral moisture bands separate water from shadows
-Siamese + Hard-Example Mining (Class-Balanced Sampler),98.85%,38.90%,35.40%,39.80%,Oversamples rare Demolished/Dried/Wetted pairs
-Best Combined Model (Attention Siamese + Focal-Tversky + Sampler + Calibration),99.08%,43.15%,39.82%,44.20%,Optimal generalization across unseen validation villages
